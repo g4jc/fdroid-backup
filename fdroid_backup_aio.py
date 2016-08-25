@@ -68,7 +68,7 @@ def getAPK(xml):
 	    apkObj = app[counter].firstChild.data.encode('ascii', 'ignore')
 	    counter += 1
 	    apknames.append(apkObj)
-	    ist(set(apknames))
+	    list(set(apknames))
 
     result = [ item for tup in zip(hashvalues,apknames) for item in tup ]
     
@@ -142,7 +142,7 @@ def getSource(xml):
 		sourcenames.append(sourceObj)
 		list(set(sourcenames))
     ## Magical Regex to create downloadable url's
-		ladd_fdroid_url = [re.sub(regex_line_start, repo_url, string) for string in sourcenames]
+		add_fdroid_url = [re.sub(regex_line_start, repo_url, string) for string in sourcenames]
 		f = open( 'download_sources.txt', 'w' )
 		f.write("\n".join(add_fdroid_url)) ## Convert list to line breaks, prepend the url, and print to file.
 		f.close()

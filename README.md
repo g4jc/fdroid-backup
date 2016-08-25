@@ -2,7 +2,7 @@
 A small script to create a local copy of f-droid repo. All APK, Icons, and signed jars. Sources are saved in their own folder. Integrity check on refresh. Public Domain.
 
 # PreRequisits
-* wget / sed / python
+* wget / sed / python2
 
 * pip install pycurl
 
