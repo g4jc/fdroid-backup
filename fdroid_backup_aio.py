@@ -53,6 +53,16 @@ def getAPK(xml):
     fdroidNode = doc.firstChild
     counter = 0
     app = fdroidNode.getElementsByTagName("apkname")
+    hashes = fdroidNode.getElementsByTagName("hash")
+
+    hashvalues = []
+    for thehash in hashes:
+        hashObj = hashes[counter].firstChild.data.encode('ascii', 'ignore')
+	counter += 1
+	hashvalues.append(hashObj)
+	list(set(hashObj))
+
+    counter = 0
 
     apknames = []
     for application in app:
@@ -60,9 +70,12 @@ def getAPK(xml):
 	counter += 1
         apknames.append(apkObj)
 	list(set(apknames))
-        ## print '\n'.join(apknames) ## Only needed for debugging the list or piping manually to a file.
-    ## f.write("%s\n" % apknames) ## literally write list to file
+
+    result = [ item for tup in zip(hashvalues,apknames) for item in tup ]
     
+    f = open( 'hash.txt', 'w' )
+    f.write("\t".join(result)) ## Join APK and SHA256 hashes so that we can check for integrity later. (Required for grepping during re-dump/refresh script)
+    f.close()
 
     f = open( 'download_apk.txt', 'w' )
     ## Magical Regex to create downloadable url's
@@ -77,7 +90,7 @@ def getAPK(xml):
       f.close()
 
     f = open( 'apk.txt', 'w' )
-    f.write("\n".join(apknames)) ## Print only apk names (useful for grepping during re-dump)
+    f.write("\n".join(apknames)) ## Print only apk names (Required for grepping during re-dump/refresh script)
     f.close()
     f = open( 'apk.txt', 'a' )
     f.write('\n' + "\n".join([re.sub(regex_line_end, '.asc', string) for string in apknames])) ## Append .asc signatures to same file.
@@ -96,7 +109,7 @@ def getIcons(xml):
     icon = fdroidNode.getElementsByTagName("icon")
 
     iconsnames = []
-    for iconlication in icon:
+    for iconlocation in icon:
         iconsObj = icon[counter].firstChild.data.encode('ascii', 'ignore')
 	counter += 1
         iconsnames.append(iconsObj)
@@ -109,13 +122,43 @@ def getIcons(xml):
     f.close()
 
     f = open( 'icons.txt', 'w' )
-    f.write("\n".join(iconsnames)) ## Print only icon names (useful for grepping during re-dump)
+    f.write("\n".join(iconsnames)) ## Print only icon names (Required for grepping during re-dump/refresh script)
     f.close()
+
+
+def getSource(xml):
+    """
+    Print out all source tarballs found in xml
+    """
+    doc = minidom.parse(xml)
+    node = doc.documentElement
+    fdroidNode = doc.firstChild
+    counter = 0
+    source = fdroidNode.getElementsByTagName("srcname")
+
+    sourcenames = []
+    for sourcelocation in source:
+        sourceObj = source[counter].firstChild.data.encode('ascii', 'ignore')
+	counter += 1
+        sourcenames.append(sourceObj)
+	list(set(sourcenames))
+    ## Magical Regex to create downloadable url's
+    add_fdroid_url = [re.sub(regex_line_start, repo_url, string) for string in sourcenames]
+    ##
+    f = open( 'download_sources.txt', 'w' )
+    f.write("\n".join(add_fdroid_url)) ## Convert list to line breaks, prepend the url, and print to file.
+    f.close()
+
+    f = open( 'sources.txt', 'w' )
+    f.write("\n".join(sourcenames)) ## Print only source tarball names (Required for grepping during re-dump/refresh script)
+    f.close()
+
 
 if __name__ == "__main__":
     document = 'index.xml'
     getAPK(document)
     getIcons(document)
+    getSource(document)
 
 
 

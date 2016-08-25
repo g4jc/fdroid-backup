@@ -5,6 +5,7 @@ echo "Downloading latest F-Droid files to current directory..."
 python fdroid_backup_aio.py
 wait
 mkdir repo
+wait
 cd repo/
 wget -nc --content-disposition --trust-server-names -i ../download_apk.txt
 wait
@@ -13,10 +14,19 @@ cd icons
 wget -nc --content-disposition --trust-server-names -i ../../download_icons.txt
 wait
 cd ../..
+wait
+mkdir sources
+wait
+cd sources/
+wait
+wget -nc --content-disposition --trust-server-names -i ../download_sources.txt
+wait
+cd ../
+wait
 mv -t repo/ index.xml index.jar categories.txt latestapps.dat
 wait
 ## Cleanup working directory.
-rm download_apk.txt apk.txt download_icons.txt icons.txt
+rm download_apk.txt apk.txt download_icons.txt icons.txt download_sources.txt
 wait
 echo "Downloads finished, you should have a working backup of the f-droid mirror"
 

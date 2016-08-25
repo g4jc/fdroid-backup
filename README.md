@@ -1,8 +1,8 @@
 # fdroid-backup
-A small script to create a local copy of f-droid repo. All APK, Icons, and signed jars. Public Domain.
+A small script to create a local copy of f-droid repo. All APK, Icons, and signed jars. Sources are saved in their own folder. Integrity check on refresh. Public Domain.
 
 # Usage
-1) Make sure you create a new directory to put all the files. 
+1) Make sure you create a new working directory to put all the files. <-- important.
 
 2) Run fdroid_fresh.sh 
 
@@ -10,4 +10,3 @@ A small script to create a local copy of f-droid repo. All APK, Icons, and signe
 
 4) ??? profit!
 
-TODO: Backup source tarballs, I only needed this script to backup the entire binary repo. 
