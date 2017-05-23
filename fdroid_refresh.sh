@@ -2,7 +2,7 @@
 echo "Make sure you are in desired folder (e.g. ~/f-droid.org/) prior to running this script."
 echo "You may also want to modify 'repo_url' on fdroid_backup_aio.py if you wish to mirror a site besides f-droid.org"
 echo "Downloading latest F-Droid files to current directory..."
-python fdroid_backup_aio.py
+python2 fdroid_backup_aio.py
 wait
 ls repo/ > downloaded_apk.txt ## Get list of existing files to save time.
 wait
@@ -35,11 +35,19 @@ wait
 wget -nc --content-disposition --trust-server-names -i ../sources_to_download.txt ## Download unsynced source tarballs to repo/
 wait
 cd ../
+#git clone https://gitlab.com/fdroid/fdroiddata.git ## Download metadata (Leaving this off for now)
 wait
+#for f in metadata/*.txt; do cp fdroiddata/$f metadata/; done ## Copy metadata to correct folder.
+## for f in metadata/*.txt; do cp $(echo $f | sed 's|metadata/|/mnt/repo/f-droid.org/metadata/|') metadata/; done
+#wait
 ##Begin File Integrity Check##
 sed -i -r 's/\s+/ \*/g' hash.txt
 wait
+sed -i 's/^*//' hash.txt
+wait
 sed -i 's|.apk \*|.apk\n|g' hash.txt
+wait
+sed -i 's|.zip \*|.zip\n|g' hash.txt
 wait
 cd repo/
 echo "Checking file integrity please wait..."
